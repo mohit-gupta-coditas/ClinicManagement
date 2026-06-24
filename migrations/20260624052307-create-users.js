@@ -27,6 +27,7 @@ export default {
         },  
         email: {
           type: DataTypes.STRING,
+          unique: true,
           allowNull: false
         },
         address: {

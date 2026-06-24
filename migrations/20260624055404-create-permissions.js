@@ -1,7 +1,9 @@
 'use strict';
 
+import { DataTypes } from 'sequelize';
+
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   async up (queryInterface, Sequelize) {
     /**
      * Add altering commands here.

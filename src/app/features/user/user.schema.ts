@@ -12,12 +12,12 @@ export class UserSchema extends Model<
   declare address: string;
   declare phoneNumber: string;
   declare password: string;
-  declare passwordVersion: CreationOptional<number>;
+  declare passwordVersion: CreationOptional<number | undefined>;
   declare role: ROLES;
-  declare isDeleted: CreationOptional<boolean>;
-  declare createdAt: CreationOptional<Date>;
-  declare updatedAt: CreationOptional<Date>;
-  declare createdBy: CreationOptional<string>;
+  declare isDeleted: CreationOptional<boolean | undefined>;
+  declare createdAt: CreationOptional<Date | undefined>;
+  declare updatedAt: CreationOptional<Date | undefined>;
+  declare createdBy: CreationOptional<string | undefined>;
 }
 
 UserSchema.init({
@@ -33,6 +33,7 @@ UserSchema.init({
   },  
   email: {
     type: DataTypes.STRING,
+    unique: true,
     allowNull: false
   },
   address: {
@@ -78,6 +79,10 @@ UserSchema.init({
   createdBy: {
     type: DataTypes.UUID,
     allowNull: true, 
+    references: {
+      model: UserSchema,
+      key: 'id'
+    },
     defaultValue: null
   }
 }, {
