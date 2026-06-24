@@ -1,0 +1,1 @@
+export type ROLES = 'paitent'| 'clinician' |'front-desk co-ordinator';

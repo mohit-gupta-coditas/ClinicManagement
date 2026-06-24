@@ -1,0 +1,10 @@
+{
+  "jsc": {
+    "parser": {
+      "syntax": "typescript"
+    },
+    "target": "esnext"
+  },
+  "exclude": ["node_modules", "dist"],
+  "sourceMaps": true
+}
