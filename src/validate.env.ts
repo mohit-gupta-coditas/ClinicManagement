@@ -8,7 +8,8 @@ const envSchema = z.object({
   REDIS_HOST: z.string(`'REDIS_HOST' must be a valid string`).trim().min(1),
   REDIS_PORT: z.coerce.number(`'REDIS_PORT' must be a valid number.`),
   REDIS_PASSWORD: z.string(`'REDIS_PASSWORD' must be a valid string.`).trim().min(1),
-  REDIS_USERNAME: z.string(`'REDIS_USERNAME' must be a valid string.`).trim().min(1)
+  REDIS_USERNAME: z.string(`'REDIS_USERNAME' must be a valid string.`).trim().min(1),
+  ACCESS_TOKEN_TIME: z.coerce.number(`'ACCESS_TOKEN_TIME' must be a number.`)
 });
 
 export const env = envSchema.parse(process.env);

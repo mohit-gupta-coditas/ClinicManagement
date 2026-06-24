@@ -17,7 +17,6 @@ export class UserSchema extends Model<
   declare isDeleted: CreationOptional<boolean | undefined>;
   declare createdAt: CreationOptional<Date | undefined>;
   declare updatedAt: CreationOptional<Date | undefined>;
-  declare createdBy: CreationOptional<string | undefined>;
 }
 
 UserSchema.init({
@@ -75,15 +74,6 @@ UserSchema.init({
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: Sequelize.fn('now')
-  },
-  createdBy: {
-    type: DataTypes.UUID,
-    allowNull: true, 
-    references: {
-      model: UserSchema,
-      key: 'id'
-    },
-    defaultValue: null
   }
 }, {
   sequelize,

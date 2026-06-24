@@ -2,7 +2,7 @@ import type { WhereOptions } from "sequelize";
 import { UserSchema } from "./user.schema.js";
 import type { User } from "./user.types.js";
 
-const createUser = (user: Pick<User, "name" | "email" | "password" | "phoneNumber" | "address" | "role" | "createdBy">) => UserSchema.create(user);
+const createUser = (user: Pick<User, "name" | "email" | "password" | "phoneNumber" | "address" | "role">) => UserSchema.create(user);
 
 const getOneUser = (user: Partial<User>) => UserSchema.findOne({where: user});
 

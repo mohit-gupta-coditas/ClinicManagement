@@ -55,11 +55,6 @@ export default {
           ),
           allowNull: false,
         },
-        isDeleted : {
-          type : DataTypes.BOOLEAN,
-          allowNull: false,
-          defaultValue: false
-        },
         createdAt: {
           type: DataTypes.DATE,
           allowNull: false,
@@ -69,27 +64,7 @@ export default {
           type: DataTypes.DATE,
           allowNull: false,
           defaultValue: Sequelize.Sequelize.fn('now')
-        },
-        createdBy: {
-          type: DataTypes.UUID,
-          allowNull: true, 
-          defaultValue: null
         }
-      }
-    );
-
-    await queryInterface.addConstraint(
-      'users',
-      {
-        type: 'foreign key',
-        fields: ['createdBy'],
-        name: 'fk_created_by_user',
-        references: {
-          table: 'users',
-          field: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'NO ACTION'
       }
     );
   },
