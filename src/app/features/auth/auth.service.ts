@@ -6,9 +6,9 @@ import { signToken } from "../../utils/jwt.helper.js";
 import { privateKey } from "../../utils/jwt.keys.js";
 import { env } from "../../../validate.env.js";
 
-const register = async (user: Pick<User, "name" | "email" | "address" | "phoneNumber" | "role" | "password">) => {
+const register = async (user: Pick<User, "name" | "email" | "address" | "phoneNumber" | "password">) => {
   try {
-    await userService.createUser(user);
+    await userService.createUser({...user, role: 'patient'});
     return AUTH_RESPONSE.USER_REGISTERED;
   } catch(err) {
     throw AUTH_RESPONSE.USER_NOT_REGISTERED;
@@ -18,8 +18,6 @@ const register = async (user: Pick<User, "name" | "email" | "address" | "phoneNu
 const loginPassword = async (credentials: Pick<User, "email" | "password">) => {
   try {
     const user = await userService.getUser({email: credentials.email});
-    
-    if(!user) throw AUTH_RESPONSE.INVALID_CREDENTIALS;
 
     const isValid = await compare(credentials.password, user.password);
 
@@ -35,8 +33,11 @@ const loginPassword = async (credentials: Pick<User, "email" | "password">) => {
     )
 
     return {...AUTH_RESPONSE.LOGIN_SUCCESS, accessToken};
-  } catch(err) {
-    throw err;
+  } catch(err: any) {
+    if(err.message === "USER NOT FOUND") {
+      throw AUTH_RESPONSE.INVALID_CREDENTIALS;
+    }
+    throw AUTH_RESPONSE.LOGIN_FAILED;
   }
 }
 

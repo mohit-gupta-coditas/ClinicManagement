@@ -9,7 +9,11 @@ const envSchema = z.object({
   REDIS_PORT: z.coerce.number(`'REDIS_PORT' must be a valid number.`),
   REDIS_PASSWORD: z.string(`'REDIS_PASSWORD' must be a valid string.`).trim().min(1),
   REDIS_USERNAME: z.string(`'REDIS_USERNAME' must be a valid string.`).trim().min(1),
-  ACCESS_TOKEN_TIME: z.coerce.number(`'ACCESS_TOKEN_TIME' must be a number.`)
+  ACCESS_TOKEN_TIME: z.coerce.number(`'ACCESS_TOKEN_TIME' must be a number.`),
+  AWS_REGION: z.string(`'AWS_REGION' must be a valid string`).trim().min(1),
+  AWS_ACCESS_KEY: z.string(`'AWS_REGION' must be a valid string`).trim().min(1),
+  AWS_SECRET_ACCESS_KEY: z.string(`'AWS_REGION' must be a valid string`).trim().min(1),
+  SES_SENDER_EMAIL: z.email(`'SES_SENDER_EMAIL' must be a valid string`).trim().min(1)
 });
 
 export const env = envSchema.parse(process.env);

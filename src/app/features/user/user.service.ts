@@ -20,9 +20,10 @@ const createUser = async (user: Pick<User, "name" | "email" | "address" | "phone
     if(oldUser) throw USER_RESPONSE.USER_ALREADY_EXISTS;
 
     user.password = await hashPassword(user.password);
-
+    console.log(user);
     await userRepo.createUser(user);
   } catch(err) {
+    console.log(err);
     throw USER_RESPONSE.USER_NOT_CREATED;
   }
 }

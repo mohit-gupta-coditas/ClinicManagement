@@ -8,6 +8,7 @@ const check = (type: 'query' | 'body' | 'params') => (schema : ZodObject) => (re
     } else {
       req[type] = schema.parse(req[type]);
     }
+    next();
   } catch(err) {
     next(err);
   }

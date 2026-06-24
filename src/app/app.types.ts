@@ -3,7 +3,7 @@ export interface Payload {
   role: string;
 }
 
-export type ROLES = 'paitent'| 'clinician' |'front-desk co-ordinator';
+export type ROLES = 'patient'| 'clinician' |'front-desk co-ordinator' | 'super-admin';
 
 const createRoleManager = (roles : string[]) => {
   return {
@@ -14,7 +14,8 @@ const createRoleManager = (roles : string[]) => {
 }
 
 export const MANAGE_ROLE = createRoleManager([
-  'paitent',
+  'patient',
   'clinician',
-  'front-desk co-ordinator'
+  'front-desk co-ordinator',
+  'super-admin'
 ]);

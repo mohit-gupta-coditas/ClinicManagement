@@ -8,7 +8,7 @@ export const ZUser = z.object({
     phoneNumber: z.string(`'phoneNumber' must be a valid string`).trim().min(10).max(10),
     password: z.string(`'address' must be a valid string`).trim().min(1),
     passwordVersion: z.coerce.number(`'passwordVersion' must be a valid number`).optional(),
-    role: z.enum(['paitent','clinician','front-desk co-ordinator']),
+    role: z.enum(['patient','clinician','front-desk co-ordinator', 'super-admin']),
     createdAt: z.date(`'createdAt' must be a valid date`).optional(),
     updatedAt: z.date(`'updatedAt' must be a valid date`).optional()
 });

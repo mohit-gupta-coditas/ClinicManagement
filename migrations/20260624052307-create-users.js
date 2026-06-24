@@ -48,11 +48,7 @@ export default {
           defaultValue: 0
         },
         role: {
-          type: DataTypes.ENUM(
-            'paitent',
-            'clinician',
-            'front-desk co-ordinator'
-          ),
+          type: DataTypes.STRING,
           allowNull: false,
         },
         createdAt: {

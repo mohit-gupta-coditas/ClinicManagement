@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize, type CreationOptional, type InferAttributes, type InferCreationAttributes } from "sequelize";
-import type { ROLES } from "../../app.types.js";
+import { MANAGE_ROLE, type ROLES } from "../../app.types.js";
 import { sequelize } from "../../connections/pg.connection.js";
 
 export class UserSchema extends Model<
@@ -13,8 +13,7 @@ export class UserSchema extends Model<
   declare phoneNumber: string;
   declare password: string;
   declare passwordVersion: CreationOptional<number | undefined>;
-  declare role: ROLES;
-  declare isDeleted: CreationOptional<boolean | undefined>;
+  declare role: 'patient' | 'clinician' | 'front-desk co-ordinator' | 'super-admin';
   declare createdAt: CreationOptional<Date | undefined>;
   declare updatedAt: CreationOptional<Date | undefined>;
 }
@@ -54,16 +53,9 @@ UserSchema.init({
   },
   role: {
     type: DataTypes.ENUM(
-      'paitent',
-      'clinician',
-      'front-desk co-ordinator'
+      'patient','clinician','front-desk co-ordinator', 'super-admin'
     ),
     allowNull: false,
-  },
-  isDeleted : {
-    type : DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false
   },
   createdAt: {
     type: DataTypes.DATE,
