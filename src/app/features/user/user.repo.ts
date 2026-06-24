@@ -10,9 +10,12 @@ const getAllUsers = (where: WhereOptions<Pick<User, "name" | "email" | "phoneNum
 
 const updateUser = (user: Partial<User>, id: string) => UserSchema.update(user, {where: {id}});
 
+const deleteUser = (id: string) => UserSchema.destroy({where: {id}});
+
 export default{
   createUser,
   updateUser,
   getAllUsers,
-  getOneUser
+  getOneUser,
+  deleteUser
 }

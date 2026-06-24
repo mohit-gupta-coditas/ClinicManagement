@@ -13,4 +13,12 @@ export const ZUser = z.object({
     updatedAt: z.date(`'updatedAt' must be a valid date`).optional()
 });
 
+export const ZUserOptions = z.object({
+    search: z.string(`'search' must not be empty`).trim().min(1),
+    limit: z.coerce.number(`'limit' must be a valid number `).default(10),
+    offset: z.coerce.number(`'offset' must be a valid number`).default(0),
+    sortBy: z.string(`'sortBy' must be a valid column name`).default('name'),
+    orderBy: z.enum(['ASC', 'DESC']).default('ASC')
+});
+
 export type User = z.infer<typeof ZUser>;

@@ -1,7 +1,8 @@
+import { Op, type WhereOptions } from "sequelize";
 import { hashPassword } from "../../utils/hash.password.js";
 import userRepo from "./user.repo.js";
 import { USER_RESPONSE } from "./user.response.js";
-import type { User } from "./user.types.js";
+import type { User, UserOptions } from "./user.types.js";
 
 const getUser = async (user: Partial<User>) => {
   try {
@@ -20,15 +21,64 @@ const createUser = async (user: Pick<User, "name" | "email" | "address" | "phone
     if(oldUser) throw USER_RESPONSE.USER_ALREADY_EXISTS;
 
     user.password = await hashPassword(user.password);
-    console.log(user);
     await userRepo.createUser(user);
   } catch(err) {
-    console.log(err);
     throw USER_RESPONSE.USER_NOT_CREATED;
+  }
+}
+
+const getAllUsers = async (options: UserOptions, ) => {
+  try {
+    const where: WhereOptions<User> = {};
+    const limit = options.limit ?? 10;
+    const offset = options.offset ?? 0;
+    const order: Array<Array<string>> = [[]];
+
+    if(options.search) {
+      
+    }
+
+    order[0]?.push(options.sortBy, options.orderBy);
+
+    const allUsers = await userRepo.getAllUsers(where, limit, offset, order);
+    return allUsers;
+  } catch(err) {
+    throw err;
+  }
+}
+
+const updateUser = async (user: Partial<User>, id: string) => {
+  try {
+    const oldUser = await userRepo.getOneUser({id});
+    if(!oldUser) throw USER_RESPONSE.USER_NOT_FOUND;
+
+    const isUpdated = await userRepo.updateUser(user, id);
+    if(!isUpdated) throw USER_RESPONSE.USER_NOT_UPDATED;
+
+    return USER_RESPONSE.USER_UPDATED;
+  } catch(err) {
+    throw err;
+  }
+}
+
+const deleteUser = async (id: string) => {
+  try {
+    const oldUser = await userRepo.getOneUser({id});
+    if(!oldUser) throw USER_RESPONSE.USER_NOT_FOUND;
+
+    const isDeleted = await userRepo.deleteUser(id);
+    if(!isDeleted) throw USER_RESPONSE.USER_NOT_DELETED;
+
+    return USER_RESPONSE.USER_DELETED;
+  } catch(err) {
+    throw err;
   }
 }
 
 export default {
   getUser,
-  createUser
+  createUser,
+  getAllUsers,
+  updateUser,
+  deleteUser
 }
