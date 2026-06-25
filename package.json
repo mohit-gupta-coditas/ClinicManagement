@@ -20,6 +20,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/luxon": "^3.7.2",
     "@types/multer": "^2.1.0",
     "@types/multer-s3": "^3.0.3",
     "@types/node": "^26.0.0",
@@ -37,13 +38,16 @@
     "fs": "0.0.1-security",
     "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.3",
+    "luxon": "^3.7.2",
     "multer": "^2.2.0",
     "multer-s3": "^3.0.1",
     "node": "^24.18.0",
+    "node-cron": "^4.5.0",
     "pg": "^8.22.0",
     "pg-hstore": "^2.3.4",
     "redis": "^6.0.0",
     "sequelize": "^6.37.8",
+    "socket.io": "^4.8.3",
     "zod": "^4.4.3"
   }
 }

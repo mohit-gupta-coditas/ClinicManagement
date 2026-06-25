@@ -55,7 +55,8 @@ router.get(
   { 
     isPermitted: MANAGE_ROLE.pick(
       'clinician',
-      'front-desk co-ordinator'
+      'front-desk co-ordinator',
+      'super-admin'
     )
   },
   query(ZAppointmentOptions),
