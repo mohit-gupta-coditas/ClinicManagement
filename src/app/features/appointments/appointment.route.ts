@@ -74,7 +74,8 @@ router.patch(
   '/:id',
   { 
     isPermitted: MANAGE_ROLE.pick(
-      'front-desk co-ordinator'
+      'front-desk co-ordinator',
+      'clinician'
     )
   },
   params(ZAppointment.pick({id: true})),

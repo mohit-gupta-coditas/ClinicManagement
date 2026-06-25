@@ -6,7 +6,6 @@ import { sendEmail } from "../../utils/aws.helper.js";
 import userService from "../user/user.service.js";
 import { env } from "../../../validate.env.js";
 import { signToken } from "../../utils/jwt.helper.js";
-import appointmentRoute from "./appointment.route.js";
 
 const getAppointment = async (appointment: Partial<Appointment>) => {
   try {
