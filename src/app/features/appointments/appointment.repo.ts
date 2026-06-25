@@ -1,6 +1,6 @@
 import type { WhereOptions } from "sequelize";
-import { AppointmentSchema } from "./appointment.schema.js";
 import type { Appointment } from "./appointment.types.js";
+import { AppointmentSchema } from "../../connections/associations.js";
 
 const createAppointment = (appointment: Pick<Appointment,"patientId" | "clinicianId" | "visitReason" |"appointmentDate" | "startTime" | "endTime" | "status">) => AppointmentSchema.create(appointment);
 

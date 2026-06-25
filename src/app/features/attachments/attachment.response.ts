@@ -1,0 +1,15 @@
+import { ResponseFormat } from "../../utils/response.format.js";
+
+export const ATTACHMENT_RESPONSE : Record<
+'ATTACHMENT_SAVED' | 
+'ATTACHMENT_NOT_SAVED' |
+'ATTACHMENT_NOT_FOUND' |
+'ATTACHMENT_DELETED' |
+'ATTACHMENT_NOT_DELETED'
+, ResponseFormat> = {
+  ATTACHMENT_SAVED: new ResponseFormat(201, 'ATTACHMENT SAVED'),
+  ATTACHMENT_NOT_SAVED: new ResponseFormat(400, 'ATTACHMENT NOT SAVED'),
+  ATTACHMENT_NOT_FOUND: new ResponseFormat(404, 'ATTACHMENT NOT FOUND'),
+  ATTACHMENT_DELETED: new ResponseFormat(200, 'ATTACHMENT DELETED'),
+  ATTACHMENT_NOT_DELETED: new ResponseFormat(400, 'ATTACHMENT NOT DELETED'),
+}

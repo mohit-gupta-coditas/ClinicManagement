@@ -1,6 +1,6 @@
 import type { WhereOptions } from "sequelize";
-import { MedicalQuestionsSchema } from "./medicalInformation.schema.js";
 import type { MedicalQuestions } from "./medicalInformationtypes.js";
+import { MedicalQuestionsSchema } from "../../connections/associations.js";
 
 const createMedicalInformation = (medicalquestions: Pick<MedicalQuestions, "patientId" | "appointmentId" | "smoker" | "diabetic" | "alcoholConsumption">) => MedicalQuestionsSchema.create(medicalquestions);
 
