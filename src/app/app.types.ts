@@ -5,6 +5,8 @@ export interface Payload {
 
 export type ROLES = 'patient'| 'clinician' |'front-desk co-ordinator' | 'super-admin';
 
+export type ATTACHMENT_TYPE = 'identification' | 'insurance card' | 'prior reports';
+
 const createRoleManager = (roles : string[]) => {
   return {
     all : () => roles,

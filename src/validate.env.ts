@@ -13,7 +13,8 @@ const envSchema = z.object({
   AWS_REGION: z.string(`'AWS_REGION' must be a valid string`).trim().min(1),
   AWS_ACCESS_KEY: z.string(`'AWS_REGION' must be a valid string`).trim().min(1),
   AWS_SECRET_ACCESS_KEY: z.string(`'AWS_REGION' must be a valid string`).trim().min(1),
-  SES_SENDER_EMAIL: z.email(`'SES_SENDER_EMAIL' must be a valid string`).trim().min(1)
+  SES_SENDER_EMAIL: z.email(`'SES_SENDER_EMAIL' must be a valid string`).trim().min(1),
+  JWT_SECRET_KEY: z.string(`'JWT_SECRET_KEY' must be a valid string`).trim().min(1)
 });
 
 export const env = envSchema.parse(process.env);

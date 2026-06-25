@@ -22,6 +22,7 @@ const createUser = async (user: Pick<User, "name" | "email" | "address" | "phone
 
     user.password = await hashPassword(user.password);
     await userRepo.createUser(user);
+    return USER_RESPONSE.USER_CREATED;
   } catch(err) {
     throw USER_RESPONSE.USER_NOT_CREATED;
   }
@@ -35,7 +36,14 @@ const getAllUsers = async (options: UserOptions, ) => {
     const order: Array<Array<string>> = [[]];
 
     if(options.search) {
-      
+      where[Op.or as any] = {
+        name: {
+          [Op.like] : `%${options.search}%`
+        },
+        email: {
+          [Op.like] : `%${options.search}%`
+        }
+      }
     }
 
     order[0]?.push(options.sortBy, options.orderBy);

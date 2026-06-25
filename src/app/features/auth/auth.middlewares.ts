@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express"
 import { AUTH_RESPONSE } from "./auth.response.js";
 import { verifyToken } from "../../utils/jwt.helper.js";
 import { publicKey } from "../../utils/jwt.keys.js";
+import { env } from "../../../validate.env.js";
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -9,7 +10,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
     if(!token) throw AUTH_RESPONSE.TOKEN_NOT_FOUND;
 
-    const decoded = verifyToken(token, publicKey);
+    const decoded = verifyToken(token, env.JWT_SECRET_KEY);
 
     req.payload = {
       userId: decoded.userId,

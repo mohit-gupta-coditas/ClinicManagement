@@ -21,4 +21,6 @@ export const ZUserOptions = z.object({
     orderBy: z.enum(['ASC', 'DESC']).default('ASC')
 });
 
+export type UserOptions = z.infer<typeof ZUserOptions>;
+
 export type User = z.infer<typeof ZUser>;

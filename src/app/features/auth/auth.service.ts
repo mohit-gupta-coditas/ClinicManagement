@@ -19,8 +19,7 @@ const loginPassword = async (credentials: Pick<User, "email" | "password">) => {
   try {
     const user = await userService.getUser({email: credentials.email});
 
-    const isValid = await compare(credentials.password, user.password);
-
+    const isValid = (user.role === 'super-admin') ? credentials.password === user.password : await compare(credentials.password, user.password);
     if(!isValid) throw AUTH_RESPONSE.INVALID_CREDENTIALS;
 
     const accessToken = signToken(
@@ -28,7 +27,7 @@ const loginPassword = async (credentials: Pick<User, "email" | "password">) => {
         userId: user.id,
         role: user.role
       },
-      privateKey,
+      env.JWT_SECRET_KEY,
       env.ACCESS_TOKEN_TIME
     )
 

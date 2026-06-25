@@ -40,7 +40,7 @@ export default {
           type: DataTypes.STRING,
           allowNull: true
         },
-        Date: {
+        appointmentDate: {
           type: DataTypes.DATE,
           allowNull: false
         },
