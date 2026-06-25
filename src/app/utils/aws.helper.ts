@@ -25,7 +25,8 @@ export const sendEmail = async (
       },
     });
 
-    await sesClient.send(command);
+    const result = await sesClient.send(command);
+    console.log(result);
   } catch(err) {
     throw err;
   }

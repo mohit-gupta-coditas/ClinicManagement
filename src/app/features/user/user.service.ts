@@ -60,6 +60,10 @@ const updateUser = async (user: Partial<User>, id: string) => {
     const oldUser = await userRepo.getOneUser({id});
     if(!oldUser) throw USER_RESPONSE.USER_NOT_FOUND;
 
+    if(user.password) {
+      user.password = await hashPassword(user.password);
+    }
+
     const isUpdated = await userRepo.updateUser(user, id);
     if(!isUpdated) throw USER_RESPONSE.USER_NOT_UPDATED;
 

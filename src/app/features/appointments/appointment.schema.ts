@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize, type CreationOptional, type InferAttributes, type InferCreationAttributes } from "sequelize";
 import { sequelize } from "../../connections/pg.connection.js";
+import type { iso } from "zod";
 
 export class AppointmentSchema extends Model<
  InferAttributes<AppointmentSchema>,
@@ -11,11 +12,16 @@ export class AppointmentSchema extends Model<
   declare visitReason: string;
   declare status: 'intakePending' | 'intakeCompleted' | 'checkedIn' | 'inProgress' | 'completed';
   declare clinicalSummary: CreationOptional<string>;
-  declare appointmentDate: Date;
+  declare appointmentDate: string;
   declare startTime: string;
   declare endTime: string;
   declare createdAt: CreationOptional<Date | undefined>;
   declare updatedAt: CreationOptional<Date | undefined>;
+
+  toSafeJSON()  {
+    const {createdAt, updatedAt, ...rest} = this.toJSON();
+    return rest;
+  }
 }
 
 AppointmentSchema.init({
@@ -46,7 +52,7 @@ AppointmentSchema.init({
       allowNull: true
     },
     appointmentDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false
     },
     startTime: {

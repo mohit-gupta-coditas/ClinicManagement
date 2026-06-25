@@ -14,7 +14,7 @@ export const ZUser = z.object({
 });
 
 export const ZUserOptions = z.object({
-    search: z.string(`'search' must not be empty`).trim().min(1),
+    search: z.string(`'search' must not be empty`).trim().min(1).optional(),
     limit: z.coerce.number(`'limit' must be a valid number `).default(10),
     offset: z.coerce.number(`'offset' must be a valid number`).default(0),
     sortBy: z.string(`'sortBy' must be a valid column name`).default('name'),

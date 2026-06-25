@@ -16,6 +16,11 @@ export class UserSchema extends Model<
   declare role: 'patient' | 'clinician' | 'front-desk co-ordinator' | 'super-admin';
   declare createdAt: CreationOptional<Date | undefined>;
   declare updatedAt: CreationOptional<Date | undefined>;
+
+  toSafeJSON() {
+    const {createdAt, updatedAt, passwordVersion, password, ...rest} = this.toJSON();
+    return rest;
+  }
 }
 
 UserSchema.init({

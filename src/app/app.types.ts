@@ -1,6 +1,7 @@
 export interface Payload {
   userId: string;
   role: string;
+  appointmentId?: string;
 }
 
 export type ROLES = 'patient'| 'clinician' |'front-desk co-ordinator' | 'super-admin';

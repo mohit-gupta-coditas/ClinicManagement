@@ -2,7 +2,6 @@ import { MANAGE_ROLE } from "../../app.types.js";
 import { customRouter } from "../../routes/custom.router.js";
 import { ResponseHandler } from "../../utils/response.handler.js";
 import { body, params, query } from "../../utils/validate.request.js";
-import { ZAppointment } from "../appointment/appointment.types.js";
 import userService from "./user.service.js";
 import { ZUser, ZUserOptions } from "./user.types.js";
 
@@ -17,12 +16,11 @@ router.get(
   async (req, res, next) => {
     try {
       const result = await userService.getUser({id: req.params.id as string});
-      res.send(new ResponseHandler(result));
+      res.send(new ResponseHandler(result.toSafeJSON()));
     } catch(err) {
       next(err);
     }
   }
-
 );
 
 router.post(
@@ -63,7 +61,7 @@ router.get(
   async (req, res, next) => {
     try {
       const result = await userService.getAllUsers(req.options);
-      res.send(new ResponseHandler(result));
+      res.send(new ResponseHandler(result.map(user => user.toSafeJSON())));
     } catch(err) {
       next(err);
     }
@@ -81,7 +79,6 @@ router.patch(
     email: true,
     address: true,
     phoneNumber: true, 
-    role: true,
     password: true
   })),
   async (req, res, next) => {

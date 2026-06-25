@@ -11,3 +11,11 @@ const getAllAppointments = (where: WhereOptions<Pick<Appointment, "patientId" | 
 const updateAppointment = (appointment: Partial<Appointment>, id: string) => AppointmentSchema.update(appointment, {where: {id}});
 
 const deleteAppointment = (id: string) => AppointmentSchema.destroy({where: {id}});
+
+export default {
+  createAppointment,
+  getOneAppointment,
+  getAllAppointments,
+  updateAppointment,
+  deleteAppointment
+}
