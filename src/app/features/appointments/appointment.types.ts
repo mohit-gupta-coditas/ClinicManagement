@@ -30,4 +30,8 @@ export const ZAppointmentOptions = z.object({
   orderBy: z.enum(['ASC', 'DESC']).default('ASC')
 });
 
+export const ZAssistant = z.object({
+  input: z.string(`'input' must not be empty`)
+});
+
 export type AppointmentOptions = z.infer<typeof ZAppointmentOptions>;

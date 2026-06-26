@@ -3,7 +3,7 @@ import { customRouter } from "../../routes/custom.router.js";
 import { ResponseHandler } from "../../utils/response.handler.js";
 import { body, params, query } from "../../utils/validate.request.js";
 import appointmentService from "./appointment.service.js";
-import { ZAppointment, ZAppointmentOptions } from "./appointment.types.js";
+import { ZAppointment, ZAppointmentOptions, ZAssistant } from "./appointment.types.js";
 
 const router = customRouter();
 
@@ -117,5 +117,23 @@ router.delete(
     }
   }
 );
+
+router.post(
+  '/assistant',
+  { 
+    isPermitted: MANAGE_ROLE.pick(
+      'patient'
+    )
+  },
+  body(ZAssistant),
+  async (req, res, next) => {
+    try {
+      const result = await appointmentService.assistantRequest(req.body.input, req.payload.userId);
+      res.send(new ResponseHandler(result));
+    } catch(err) {
+      next(err);
+    }
+  }
+)
 
 export default router.setRouter('/appointment');

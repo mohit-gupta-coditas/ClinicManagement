@@ -1,6 +1,9 @@
 import { DataTypes, Model, Sequelize, type CreationOptional, type InferAttributes, type InferCreationAttributes } from "sequelize";
 import type { ATTACHMENT_TYPE } from "../../app.types.js";
 import { sequelize } from "../../connections/pg.connection.js";
+import { AppointmentSchema } from "../appointments/appointment.schema.js";
+import { IdempotencyParameterMismatch$ } from "@aws-sdk/client-s3";
+import { UserSchema } from "../user/user.schema.js";
 
 export class AttachmentSchema extends Model<
   InferAttributes<AttachmentSchema>,
@@ -28,11 +31,19 @@ AttachmentSchema.init({
   },
   appointmentId: {
     type: DataTypes.UUID,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: AppointmentSchema,
+      key: 'id'
+    }
   },
   patientId: {
     type: DataTypes.UUID,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: UserSchema,
+      key: 'id'
+    }
   },
   path: {
     type: DataTypes.STRING,

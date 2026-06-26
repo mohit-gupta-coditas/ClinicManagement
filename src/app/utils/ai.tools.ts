@@ -5,7 +5,7 @@ import appointmentService from '../features/appointments/appointment.service.js'
 
 export async function talkToAI(input: string, patientId: string) {
   const { text } = await generateText({
-    model: 'openai/gpt-5',
+    model: 'xai/grok-build-0.1',
     prompt: input + `and patientId is ${patientId}`,
     tools: {
       createAppointmentTool : tool({

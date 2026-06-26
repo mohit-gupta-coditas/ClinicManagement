@@ -21,6 +21,7 @@ const createMedicalInfo = async (medicalInfo: Pick<MedicalQuestions, "patientId"
 
     return MEDICAL_INFORMATION_RESPONSE.MEDICAL_INFORMATION_SAVED;
   } catch(err: any) {
+    console.log(err);
     throw MEDICAL_INFORMATION_RESPONSE.MEDICAL_INFORMATION_NOT_SAVED;
   }
 }

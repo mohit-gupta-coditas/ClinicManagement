@@ -32,8 +32,6 @@ router.post(
     isPermitted: MANAGE_ROLE.pick('patient')
   },
   body(ZMedicalQuestions.pick({
-    patientId: true,
-    appointmentId:true,
     smoker: true,
     diabetic: true,
     alcoholConsumption: true,
@@ -41,7 +39,8 @@ router.post(
   })),
   async (req, res, next) => {
     try {
-      const result = await medicalInformationService.createMedicalInfo({...req.body, patientId: req.payload.patientId, appointmentId: req.payload.appointementId as string});
+      console.log(req.payload);
+      const result = await medicalInformationService.createMedicalInfo({...req.body, patientId: req.payload.userId, appointmentId: req.payload.appointmentId as string});
       res.send(new ResponseHandler(result));
     } catch(err) {
       next(err);
@@ -58,8 +57,6 @@ router.patch(
   },
   params(ZMedicalQuestions.pick({id: true})),
   body(ZMedicalQuestions.pick({
-    patientId: true,
-    appointmentId:true,
     smoker: true,
     diabetic: true,
     alcoholConsumption: true,

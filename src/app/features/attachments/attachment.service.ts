@@ -57,8 +57,10 @@ const createAttachment = async (path: string, type: ATTACHMENT_TYPE, payload: Pa
       patientId: payload.userId,
       appointmentId: payload.appointmentId as string
     });
+    
     return ATTACHMENT_RESPONSE.ATTACHMENT_SAVED;
   } catch(err) {
+    console.log(err);
     throw ATTACHMENT_RESPONSE.ATTACHMENT_NOT_SAVED;
   }
 }

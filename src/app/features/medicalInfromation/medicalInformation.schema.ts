@@ -1,5 +1,7 @@
 import { DataTypes, Model, Sequelize, type CreationOptional, type InferAttributes, type InferCreationAttributes } from "sequelize";
 import { sequelize } from "../../connections/pg.connection.js";
+import { UserSchema } from "../user/user.schema.js";
+import { AppointmentSchema } from "../appointments/appointment.schema.js";
 
 export class MedicalQuestionsSchema extends Model<
   InferAttributes<MedicalQuestionsSchema>,
@@ -30,11 +32,19 @@ MedicalQuestionsSchema.init({
   },
   patientId: {
     type: DataTypes.UUID,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: UserSchema,
+      key: 'id'
+    }
   },
   appointmentId: {
     type: DataTypes.UUID,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: AppointmentSchema,
+      key: 'id'
+    }
   },
   smoker: {
     type: DataTypes.BOOLEAN,

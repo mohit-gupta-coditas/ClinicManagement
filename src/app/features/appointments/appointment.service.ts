@@ -7,6 +7,7 @@ import userService from "../user/user.service.js";
 import { env } from "../../../validate.env.js";
 import { signToken } from "../../utils/jwt.helper.js";
 import { DateTime } from "luxon";
+import { talkToAI } from "../../utils/ai.tools.js";
 
 const getAppointment = async (appointment: Partial<Appointment>) => {
   try {
@@ -22,7 +23,6 @@ const createAppointment = async (appointment: Pick<Appointment, "visitReason" | 
   try {
 
     const currentDate = DateTime.now().toFormat('yyyy-MM-dd');
-    console.log(currentDate);
     const currentTime = DateTime.now().toFormat('HH:mm');
 
     if(appointment.appointmentDate < currentDate) {
@@ -41,17 +41,17 @@ const createAppointment = async (appointment: Pick<Appointment, "visitReason" | 
 
     const user = await userService.getUser({id: appointment.patientId});
 
-    const appointmentDateSplit = appointment.appointmentDate.split('-');
-    const appointmentTimeSplit = appointment.appointmentDate.split(':');
+    // const appointmentDateSplit = appointment.appointmentDate.split('-');
+    // const appointmentTimeSplit = appointment.appointmentDate.split(':');
 
-    const currTimeObject = DateTime.now();
-    const appointmentTimeObject = DateTime.fromObject({
-      year: Number(appointmentDateSplit[0]),
-      month: Number(appointmentDateSplit[1]),
-      day: Number(appointmentDateSplit[2]),
-      hour: Number(appointmentTimeSplit[0]),
-      minute: Number(appointmentTimeSplit[1])
-    });
+    // const currTimeObject = DateTime.now();
+    // const appointmentTimeObject = DateTime.fromObject({
+    //   year: Number(appointmentDateSplit[0]),
+    //   month: Number(appointmentDateSplit[1]),
+    //   day: Number(appointmentDateSplit[2]),
+    //   hour: Number(appointmentTimeSplit[0]),
+    //   minute: Number(appointmentTimeSplit[1])
+    // });
 
     const intakeToken = signToken(
       {
@@ -60,7 +60,7 @@ const createAppointment = async (appointment: Pick<Appointment, "visitReason" | 
         appointmentId: currAppointment.id
       },
       env.JWT_SECRET_KEY,
-      Math.round(appointmentTimeObject.toSeconds() - currTimeObject.toSeconds())
+      100000
     );
 
     await sendEmail(
@@ -71,6 +71,7 @@ const createAppointment = async (appointment: Pick<Appointment, "visitReason" | 
 
     return APPOINTMENT_RESPONSE.APPOINTMENT_CREATED;
   } catch(err: any) {
+    console.log(err);
     if(err.statusCode) {
       throw err;
     }
@@ -196,7 +197,15 @@ const deleteAppointment = async (id: string) => {
 
     return APPOINTMENT_RESPONSE.APPOINTMENT_DELETED;
   } catch(err) {
-    console.log(err);
+    throw err;
+  }
+}
+
+const assistantRequest = async (input: string, userId: string) => {
+  try {
+    const result = await talkToAI(input, userId);
+    return result;
+  } catch(err) {
     throw err;
   }
 }
@@ -207,5 +216,6 @@ export default {
   createAppointment,
   updateAppointment,
   deleteAppointment,
-  schedulePendingIntakeEmail
+  schedulePendingIntakeEmail,
+  assistantRequest
 }

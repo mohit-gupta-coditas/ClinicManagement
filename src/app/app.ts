@@ -14,7 +14,7 @@ export const startServer = async () => {
     const app = express();
     
     await connectToPG();
-    await connectToRedis();
+    
     registerMiddlewares(app);
 
     cronScheduler();
