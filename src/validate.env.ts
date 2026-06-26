@@ -16,7 +16,9 @@ const envSchema = z.object({
   SES_SENDER_EMAIL: z.email(`'SES_SENDER_EMAIL' must be a valid string`).trim().min(1),
   JWT_SECRET_KEY: z.string(`'JWT_SECRET_KEY' must be a valid string`).trim().min(1),
   FRONT_END_URL: z.string(`'FRONT_END_URL' must be a string`).trim().min(1),
-  AWS_S3_BUCKET_NAME: z.string(`'AWS_S3_BUCKET_NAME' must be a valid string`).trim().min(1)
+  AWS_S3_BUCKET_NAME: z.string(`'AWS_S3_BUCKET_NAME' must be a valid string`).trim().min(1),
+  CLINIC_OPEN_TIME: z.iso.time(`'CLINIC_OPEN_TIME' must be a valid time`),
+  CLINIC_CLOSE_TIME: z.iso.time(`'CLINIC_CLOSE_TIME' must be a valid time`)
 });
 
 export const env = envSchema.parse(process.env);

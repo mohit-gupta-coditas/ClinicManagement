@@ -41,7 +41,7 @@ router.post(
   })),
   async (req, res, next) => {
     try {
-      const result = await medicalInformationService.createMedicalInfo(req.body);
+      const result = await medicalInformationService.createMedicalInfo({...req.body, patientId: req.payload.patientId, appointmentId: req.payload.appointementId as string});
       res.send(new ResponseHandler(result));
     } catch(err) {
       next(err);
@@ -92,3 +92,5 @@ router.delete(
     }
   }
 )
+
+export default router.setRouter('/medicalInfromation')

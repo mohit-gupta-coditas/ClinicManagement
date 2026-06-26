@@ -1,10 +1,11 @@
 import cron from "node-cron";
-import { DateTime } from "luxon";
+import appointmentService from "../features/appointments/appointment.service.js";
 
-cron.schedule('*/30 * * * *', async () => {
+export const cronScheduler = async () => {
   try {
-    const appointments = 
+    cron.schedule(`*/15 * * * *`, appointmentService.schedulePendingIntakeEmail);
+    console.log('CRON SCHEDULER STARTED WORKING...');
   } catch(err) {
-    throw err;
+    console.log('CRON SCHEDULER DOES NOT WORK...');
   }
-})
+}

@@ -1,10 +1,13 @@
 import express from "express";
 import { env } from "../validate.env.js";
 import { createServer } from "node:http";
-import { Server, Socket } from "socket.io";
+import { Server} from "socket.io";
 import { connectToPG } from "./connections/pg.connection.js";
 import { registerMiddlewares } from "./routes/route.js";
 import { connectToRedis } from "./connections/redis.connection.js";
+import { cronScheduler } from "./utils/cron.helper.js";
+import { DateTime } from "luxon";
+import { connectToSocket } from "./socket/socket.js";
 
 export const startServer = async () => {
   try {
@@ -14,18 +17,13 @@ export const startServer = async () => {
     await connectToRedis();
     registerMiddlewares(app);
 
+    cronScheduler();
+
     const httpServer = createServer(app);
 
     const io = new Server(httpServer);
 
-    io.on('connection', function() {
-      console.log('connection established.');
-      io.emit('hello', { message: 'Hello from server!' });
-
-      io.on('disconnect', function(){
-        console.log('disconnected...');
-      })
-    });
+    await connectToSocket(io);
 
     httpServer.listen(
       env.PORT,

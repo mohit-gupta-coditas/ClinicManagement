@@ -6,7 +6,7 @@ const createAppointment = (appointment: Pick<Appointment,"patientId" | "clinicia
 
 const getOneAppointment = (appointment: Partial<Appointment>) => AppointmentSchema.findOne({where: appointment});
 
-const getAllAppointments = (where: WhereOptions<Pick<Appointment, "patientId" | "clinicianId" | "status">>, limit: number, offset: number, order: any) => AppointmentSchema.findAll({where, limit, offset, order});
+const getAllAppointments = (where: WhereOptions<Pick<Appointment, "patientId" | "clinicianId" | "status" | "appointmentDate" | "startTime">>, limit: number, offset: number, order: any) => AppointmentSchema.findAll({where, limit, offset, order});
 
 const updateAppointment = (appointment: Partial<Appointment>, id: string) => AppointmentSchema.update(appointment, {where: {id}});
 

@@ -6,6 +6,7 @@ import { sendEmail } from "../../utils/aws.helper.js";
 import userService from "../user/user.service.js";
 import { env } from "../../../validate.env.js";
 import { signToken } from "../../utils/jwt.helper.js";
+import { DateTime } from "luxon";
 
 const getAppointment = async (appointment: Partial<Appointment>) => {
   try {
@@ -19,6 +20,19 @@ const getAppointment = async (appointment: Partial<Appointment>) => {
 
 const createAppointment = async (appointment: Pick<Appointment, "visitReason" | "patientId" | "clinicianId" | "appointmentDate" | "startTime" | "endTime">) => {
   try {
+
+    const currentDate = DateTime.now().toFormat('yyyy-MM-dd');
+    console.log(currentDate);
+    const currentTime = DateTime.now().toFormat('HH:mm');
+
+    if(appointment.appointmentDate < currentDate) {
+      throw APPOINTMENT_RESPONSE.CANNOT_BOOK_PAST_DATE;
+    }
+
+    if(appointment.startTime < currentTime) {
+      throw APPOINTMENT_RESPONSE.CANNOT_BOOK_PAST_TIME;
+    }
+
     const oldAppointment = await appointmentRepo.getOneAppointment({startTime: appointment.startTime, endTime: appointment.endTime, appointmentDate: appointment.appointmentDate.slice(0, 10)});
 
     if(oldAppointment) throw APPOINTMENT_RESPONSE.APPOINTMENT_ALREADY_EXISTS;
@@ -27,6 +41,18 @@ const createAppointment = async (appointment: Pick<Appointment, "visitReason" | 
 
     const user = await userService.getUser({id: appointment.patientId});
 
+    const appointmentDateSplit = appointment.appointmentDate.split('-');
+    const appointmentTimeSplit = appointment.appointmentDate.split(':');
+
+    const currTimeObject = DateTime.now();
+    const appointmentTimeObject = DateTime.fromObject({
+      year: Number(appointmentDateSplit[0]),
+      month: Number(appointmentDateSplit[1]),
+      day: Number(appointmentDateSplit[2]),
+      hour: Number(appointmentTimeSplit[0]),
+      minute: Number(appointmentTimeSplit[1])
+    });
+
     const intakeToken = signToken(
       {
         userId: user.id,
@@ -34,8 +60,8 @@ const createAppointment = async (appointment: Pick<Appointment, "visitReason" | 
         appointmentId: currAppointment.id
       },
       env.JWT_SECRET_KEY,
-      env.ACCESS_TOKEN_TIME
-    )
+      Math.round(appointmentTimeObject.toSeconds() - currTimeObject.toSeconds())
+    );
 
     await sendEmail(
       user.email,
@@ -49,6 +75,41 @@ const createAppointment = async (appointment: Pick<Appointment, "visitReason" | 
       throw err;
     }
     throw APPOINTMENT_RESPONSE.APPOINTMENT_NOT_CREATED;
+  }
+}
+
+const schedulePendingIntakeEmail = async () => {
+  try {
+    const currTime = DateTime.now().toFormat('HH:mm');
+
+    if(currTime < env.CLINIC_OPEN_TIME || currTime > env.CLINIC_CLOSE_TIME) {
+      return;
+    }
+
+    const appointments = await appointmentRepo.getAllAppointments(
+      {
+        appointmentDate: DateTime.now().toFormat('yyyy-MM-dd'),
+        startTime: {
+          [Op.lte]:DateTime.now().plus({minutes: 15}).toFormat('HH:mm')
+        },
+        status: 'intakePending',
+      },
+      100, 
+      0, 
+      [['startTime']]
+    );
+
+    appointments.map(async (currAppointment) => {
+      const user = await userService.getUser({id: currAppointment.patientId});
+      await sendEmail(
+        user.email,
+        'Intake Form Filling Pending',
+        `Please fill out the intake form that was send on your previous email`
+      );
+    });
+
+  } catch(err) {
+    throw err;
   }
 }
 
@@ -135,6 +196,7 @@ const deleteAppointment = async (id: string) => {
 
     return APPOINTMENT_RESPONSE.APPOINTMENT_DELETED;
   } catch(err) {
+    console.log(err);
     throw err;
   }
 }
@@ -144,5 +206,6 @@ export default {
   getAppointment,
   createAppointment,
   updateAppointment,
-  deleteAppointment
+  deleteAppointment,
+  schedulePendingIntakeEmail
 }
